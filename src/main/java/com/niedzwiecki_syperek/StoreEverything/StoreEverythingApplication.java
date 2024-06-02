@@ -2,6 +2,7 @@ package com.niedzwiecki_syperek.StoreEverything;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 public class StoreEverythingApplication {
@@ -10,4 +11,8 @@ public class StoreEverythingApplication {
 		SpringApplication.run(StoreEverythingApplication.class, args);
 	}
 
+//	@GetMapping("/")
+//	public String home() {
+//		return "home page";
+//	}
 }
