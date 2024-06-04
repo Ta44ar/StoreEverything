@@ -15,5 +15,8 @@
     <p>Welcome to the homepage!</p>
     <a href="/login">Log in</a> <a href="/register">Register</a>
 </div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a href="/admin">Go to Admin Panel</a>
+</div>
 </body>
 </html>
