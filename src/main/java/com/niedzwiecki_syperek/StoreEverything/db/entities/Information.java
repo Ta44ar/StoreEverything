@@ -42,7 +42,7 @@ public class Information {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @NotNull(message = "Użytkownik nie może być pusty")
-    private User user;
+    private UserEntity userEntity;
 
     @PrePersist
     protected void onCreate() {

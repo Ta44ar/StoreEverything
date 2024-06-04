@@ -9,12 +9,11 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "USERS")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +43,7 @@ public class User {
     private int age;
 
     @Column(name = "AKTYWNY")
-    private boolean enabled;
+    private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
