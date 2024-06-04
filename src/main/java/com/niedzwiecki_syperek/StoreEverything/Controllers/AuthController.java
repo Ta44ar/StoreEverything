@@ -60,4 +60,14 @@ public class AuthController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return "redirect:/";
+    }
 }
