@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -44,6 +46,8 @@ public class User {
     @Column(name = "AKTYWNY")
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserRole> userRoles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles = new ArrayList<>();
 }

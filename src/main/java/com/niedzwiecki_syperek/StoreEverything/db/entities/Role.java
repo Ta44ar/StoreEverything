@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "ROLES")
 @Data
@@ -22,7 +20,4 @@ public class Role {
     @Basic
     @Column(name = "ROLE")
     private String role;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserRole> userRoles;
 }
