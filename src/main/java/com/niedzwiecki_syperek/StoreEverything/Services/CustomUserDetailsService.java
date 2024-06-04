@@ -4,8 +4,10 @@ import com.niedzwiecki_syperek.StoreEverything.Repositories.UserRepository;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Role;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,5 +36,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
+    }
+
+    public UserEntity getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 }
