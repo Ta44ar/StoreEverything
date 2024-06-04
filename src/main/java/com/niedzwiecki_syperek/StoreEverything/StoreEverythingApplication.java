@@ -10,9 +10,4 @@ public class StoreEverythingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StoreEverythingApplication.class, args);
 	}
-
-//	@GetMapping("/")
-//	public String home() {
-//		return "home page";
-//	}
 }

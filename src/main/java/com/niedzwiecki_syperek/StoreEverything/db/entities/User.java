@@ -5,8 +5,13 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+import java.util.Set;
+
+@Data
 @Entity
+@Table(name = "USERS")
 public class User {
 
     @Id
@@ -36,4 +41,9 @@ public class User {
     @Min(value = 18, message = "Użytkownik musi być pełnoletni")
     private int age;
 
+    @Column(name = "AKTYWNY")
+    private boolean enabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserRole> userRoles;
 }

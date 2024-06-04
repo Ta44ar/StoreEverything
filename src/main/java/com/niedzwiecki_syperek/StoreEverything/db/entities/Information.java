@@ -3,11 +3,14 @@ package com.niedzwiecki_syperek.StoreEverything.db.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "INFORMATIONS")
+@Data
 public class Information {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

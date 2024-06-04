@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+<h1>Home Page</h1>
+
+<div sec:authorize="isAuthenticated()">
+    <p>Welcome to the homepage, <span th:text="${username}"></span>!</p>
+    <a href="/logout">Logout</a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <p>Welcome to the homepage!</p>
+    <a href="/login">Log in</a> <a href="/register">Register</a>
+</div>
+</body>
+</html>
