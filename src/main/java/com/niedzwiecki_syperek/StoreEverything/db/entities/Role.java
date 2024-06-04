@@ -19,5 +19,5 @@ public class Role {
 
     @Basic
     @Column(name = "ROLE")
-    private String role;
+    private String name;
 }
