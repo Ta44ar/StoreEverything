@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +33,14 @@ public class InformationController {
     @Autowired
     private SmartValidator validator;
 
+    @GetMapping("/my-informations")
+    public String viewMyInformations(Model model) {
+        Long currentUserId = customUserDetailsService.getCurrentUser().getId();
+        List<Information> myInformations = informationService.findByUserId(currentUserId);
+        model.addAttribute("myInformations", myInformations);
+        return "myInformations";
+    }
+
     @GetMapping("/information/add")
     public String showAddInfoForm(Model model) {
         model.addAttribute("information", new Information());
@@ -41,7 +50,7 @@ public class InformationController {
     }
 
     @PostMapping("/information/add")
-    public String addInformation(@Valid @ModelAttribute("information") Information info, BindingResult result, Model model) {
+    public String addInformation(@Valid @ModelAttribute("information") Information info, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         info.setUserEntity(customUserDetailsService.getCurrentUser());
         info.setDateAdded(LocalDate.now());
 
@@ -54,7 +63,8 @@ public class InformationController {
             return "addInfoForm";
         }
         informationService.save(info);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("successMessage", "Information added successfully!");
+        return "redirect:/my-informations";
     }
 
     @GetMapping("/information/edit/{id}")
@@ -71,12 +81,13 @@ public class InformationController {
     }
 
     @PostMapping("/information/update")
-    public String updateInformation(@Valid @ModelAttribute("information") Information info, BindingResult result, Model model) {
+    public String updateInformation(@Valid @ModelAttribute("information") Information info, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+        Information existingInfo = informationService.findById(info.getId());
         Long currentUserId = customUserDetailsService.getCurrentUser().getId();
-        if (!info.getUserEntity().getId().equals(currentUserId)) {
+        if (!existingInfo.getUserEntity().getId().equals(currentUserId)) {
             return "error/403";
         }
-        Information existingInfo = informationService.findById(info.getId());
+
         info.setUserEntity(existingInfo.getUserEntity());
         info.setDateAdded(existingInfo.getDateAdded());
 
@@ -89,17 +100,20 @@ public class InformationController {
             return "editInfoForm";
         }
         informationService.update(info);
-        return "redirect:/";
+
+        redirectAttributes.addFlashAttribute("successMessage", "Information updated successfully!");
+        return "redirect:/my-informations";
     }
 
     @GetMapping("/information/delete/{id}")
-    public String deleteInformation(@PathVariable("id") Long id) {
+    public String deleteInformation(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Information info = informationService.findById(id);
         Long currentUserId = customUserDetailsService.getCurrentUser().getId();
         if (!info.getUserEntity().getId().equals(currentUserId)) {
             return "error/403";
         }
         informationService.delete(id);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("successMessage", "Information deleted successfully!");
+        return "redirect:/my-informations";
     }
 }

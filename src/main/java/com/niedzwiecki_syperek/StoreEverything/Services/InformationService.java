@@ -5,6 +5,8 @@ import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InformationService {
     @Autowired
@@ -16,6 +18,10 @@ public class InformationService {
 
     public Information findById(Long id) {
         return infoRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid information Id:" + id));
+    }
+
+    public List<Information> findByUserId(Long userId) {
+        return infoRepo.findByUserEntityId(userId);
     }
 
     public void update(Information info) {
