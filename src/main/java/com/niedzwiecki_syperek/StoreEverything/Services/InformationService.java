@@ -1,7 +1,9 @@
 package com.niedzwiecki_syperek.StoreEverything.Services;
 
 import com.niedzwiecki_syperek.StoreEverything.Repositories.InformationRepository;
+import com.niedzwiecki_syperek.StoreEverything.Repositories.UserRepository;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
+import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class InformationService {
     @Autowired
     private InformationRepository infoRepo;
+    @Autowired
+    private UserRepository userRepo;
 
     public void save(Information info) {
         infoRepo.save(info);
@@ -48,5 +52,20 @@ public class InformationService {
 
     public Information findByShareableLink(String shareableLink) {
         return infoRepo.findByShareableLink(shareableLink).orElseThrow(() -> new IllegalArgumentException("Invalid shareable link"));
+    }
+
+    public void shareInformationWithUser(Long informationId, Long userId, Long currentUserId) {
+        Information information = infoRepo.findById(informationId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid information Id:" + informationId));
+
+        if (!information.getUserEntity().getId().equals(currentUserId)) {
+            throw new SecurityException("You can only share your own information");
+        }
+
+        UserEntity userToShare = userRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+
+        information.getSharedWithUsers().add(userToShare);
+        infoRepo.save(information);
     }
 }

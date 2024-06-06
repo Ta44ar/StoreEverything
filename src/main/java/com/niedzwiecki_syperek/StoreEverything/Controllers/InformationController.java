@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -130,5 +127,41 @@ public class InformationController {
         Information information = informationService.findByShareableLink(shareableLink);
         model.addAttribute("information", information);
         return "viewSharedInfo";
+    }
+
+    @GetMapping("/information/share-with-user/{id}")
+    public String shareInformationWithUserForm(@PathVariable("id") Long id, Model model) {
+        Information information = informationService.findById(id);
+
+        model.addAttribute("information", information);
+        model.addAttribute("users", customUserDetailsService.findAllUsersToShareInformation(information.getId(), customUserDetailsService.getCurrentUser().getId()));
+        return "shareInfoWithUser";
+    }
+
+    @PostMapping("/information/share-with-user")
+    public String shareInformationWithUser(@RequestParam("informationId") Long informationId, @RequestParam("userId") Long userId, RedirectAttributes redirectAttributes) {
+        Long currentUserId = customUserDetailsService.getCurrentUser().getId();
+        try {
+            informationService.shareInformationWithUser(informationId, userId, currentUserId);
+            redirectAttributes.addFlashAttribute("successMessage", "Information shared for user successfully!");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/my-informations";
+    }
+
+    @GetMapping("/information/view/{id}")
+    public String viewInformation(@PathVariable("id") Long id, Model model) {
+        Long currentUserId = customUserDetailsService.getCurrentUser().getId();
+        Information information = informationService.findById(id);
+
+        if (!information.getUserEntity().getId().equals(currentUserId) &&
+                information.getSharedWithUsers().stream().noneMatch(user -> user.getId().equals(currentUserId))) {
+            return "error/403";
+        }
+
+        model.addAttribute("information", information);
+        model.addAttribute("currentUserId", currentUserId);
+        return "viewInfo";
     }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Share Information with User</title>
+</head>
+<body>
+<h2>Share Information with User</h2>
+<form action="/information/share-with-user" method="post">
+    <input type="hidden" name="informationId" th:value="${information.id}" />
+    <label for="userId">Select User:</label>
+    <select id="userId" name="userId">
+        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+    </select>
+    <button type="submit">Share</button>
+</form>
+</body>
+</html>

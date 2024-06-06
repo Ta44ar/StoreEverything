@@ -32,8 +32,10 @@
         <td th:text="${info.category.name}">Category</td>
         <td th:text="${info.dateAdded}">Date Added</td>
         <td>
+            <a th:href="@{/information/view/{id}(id=${info.id})}">View</a>
             <a th:href="@{/information/edit/{id}(id=${info.id})}">Edit</a>
             <a th:href="@{/information/share/{id}(id=${info.id})}">Share</a>
+            <a th:href="@{/information/share-with-user/{id}(id=${info.id})}">Share with user</a>
             <a th:href="@{/information/delete/{id}(id=${info.id})}"
                onclick="return confirm('Are you sure you want to delete this information?');">Delete</a>
         </td>

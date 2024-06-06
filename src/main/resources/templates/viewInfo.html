@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>View Information</title>
+</head>
+<body>
+<h1 th:text="${information.title}">Information Title</h1>
+<th:block th:if="${information.userEntity.id != currentUserId}">
+    <h2>Shared with you by <span th:text="${information.userEntity.firstName} + ' ' + ${information.userEntity.lastName}"></span></h2>
+</th:block>
+<h3 th:text="${information.category.name}">Category name</h3>
+<p th:text="${information.content}">Information Content</p>
+</body>
+</html>

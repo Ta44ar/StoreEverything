@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "INFORMATIONS")
@@ -44,6 +45,14 @@ public class Information {
     @JoinColumn(name = "user_id")
     @NotNull(message = "Użytkownik nie może być pusty")
     private UserEntity userEntity;
+
+    @ManyToMany
+    @JoinTable(
+            name = "information_shared_users",
+            joinColumns = @JoinColumn(name = "information_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> sharedWithUsers;
 
     @PrePersist
     protected void onCreate() {
