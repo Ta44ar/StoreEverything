@@ -22,7 +22,7 @@ public class AdminController {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin/users")
     public String adminPage(Model model) {
         List<UserEntity> users = userRepository.findAll();
         model.addAttribute("users", users);

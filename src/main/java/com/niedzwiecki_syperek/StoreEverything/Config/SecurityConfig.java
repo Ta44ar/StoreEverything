@@ -4,6 +4,7 @@ import com.niedzwiecki_syperek.StoreEverything.Services.CustomUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,16 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
+    @Bean
+    @Order(1)
+    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws  Exception {
+        http
+                .securityMatcher("/admin/**")
+                .authorizeHttpRequests(auth-> auth
+                    .anyRequest().hasAuthority("ROLE_ADMIN")
+                );
+        return http.build();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
