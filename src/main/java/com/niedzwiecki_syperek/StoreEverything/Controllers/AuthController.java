@@ -74,7 +74,6 @@ public class AuthController {
 
     @PostMapping("/logout")
     public String logout() {
-        SecurityContextHolder.getContext().setAuthentication(null);
         return "redirect:/";
     }
 }
