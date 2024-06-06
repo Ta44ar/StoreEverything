@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InformationService {
@@ -28,7 +29,6 @@ public class InformationService {
         Information existingInfo = infoRepo.findById(info.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid information Id:" + info.getId()));
         existingInfo.setTitle(info.getTitle());
         existingInfo.setContent(info.getContent());
-        existingInfo.setLink(info.getLink());
         existingInfo.setCategory(info.getCategory());
         infoRepo.save(existingInfo);
     }
@@ -36,5 +36,17 @@ public class InformationService {
     public void delete(Long id) {
         Information info = infoRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid information Id:" + id));
         infoRepo.delete(info);
+    }
+
+    public String generateShareableLink(Long id) {
+        Information info = infoRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid information Id:" + id));
+        String shareableLink = UUID.randomUUID().toString();
+        info.setShareableLink(shareableLink);
+        infoRepo.save(info);
+        return shareableLink;
+    }
+
+    public Information findByShareableLink(String shareableLink) {
+        return infoRepo.findByShareableLink(shareableLink).orElseThrow(() -> new IllegalArgumentException("Invalid shareable link"));
     }
 }

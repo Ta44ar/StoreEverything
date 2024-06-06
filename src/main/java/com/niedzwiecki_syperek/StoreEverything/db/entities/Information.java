@@ -27,7 +27,8 @@ public class Information {
     @NotNull(message = "Treść nie może być pusta")
     private String content;
 
-    private String link;
+    @Column(unique = true)
+    private String shareableLink;
 
     @Column(nullable = false)
     @NotNull(message = "Data dodania nie może być pusta")

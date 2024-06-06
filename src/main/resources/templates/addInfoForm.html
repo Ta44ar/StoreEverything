@@ -14,10 +14,6 @@
     <textarea id="content" th:field="*{content}" required minlength="5" maxlength="500"></textarea>
     <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
     <br/>
-    <label for="link">Link:</label>
-    <input type="text" id="link" th:field="*{link}"/>
-    <span th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></span>
-    <br/>
     <label for="category">Category:</label>
     <select id="category" th:field="*{category}" required>
         <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>

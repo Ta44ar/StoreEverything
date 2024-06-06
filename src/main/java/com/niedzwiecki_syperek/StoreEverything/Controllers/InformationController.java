@@ -116,4 +116,19 @@ public class InformationController {
         redirectAttributes.addFlashAttribute("successMessage", "Information deleted successfully!");
         return "redirect:/my-informations";
     }
+
+    @GetMapping("/information/share/{id}")
+    public String shareInformation(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+        String shareableLink = informationService.generateShareableLink(id);
+        model.addAttribute("shareableLink", shareableLink);
+        redirectAttributes.addFlashAttribute("successMessage", "Information shared successfully!");
+        return "redirect:/my-informations";
+    }
+
+    @GetMapping("/information/shared/{shareableLink}")
+    public String viewSharedInformation(@PathVariable("shareableLink") String shareableLink, Model model) {
+        Information information = informationService.findByShareableLink(shareableLink);
+        model.addAttribute("information", information);
+        return "viewSharedInfo";
+    }
 }
