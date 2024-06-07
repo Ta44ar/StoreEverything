@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,10 +34,18 @@ public class InformationController {
     private SmartValidator validator;
 
     @GetMapping("/my-informations")
-    public String viewMyInformations(Model model) {
+    public String viewMyInformations(
+            @RequestParam(required = false, name = "categoryId") Long categoryId,
+            @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Model model) {
         Long currentUserId = customUserDetailsService.getCurrentUser().getId();
-        List<Information> myInformations = informationService.findByUserId(currentUserId);
+        List<Information> myInformations = informationService.findByUserIdWithFilters(currentUserId, categoryId, startDate, endDate);
         model.addAttribute("myInformations", myInformations);
+        model.addAttribute("categories", categoryService.findAllSortedByPopularity());
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "myInformations";
     }
 

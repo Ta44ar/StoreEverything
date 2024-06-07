@@ -6,8 +6,10 @@ import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -71,6 +73,7 @@ public class InformationService {
         infoRepo.save(information);
     }
 
+
     public List<Information> findSharedWithMeInfos(Long userId) {
         List<Information> allInformations = infoRepo.findAll();
         List<Information> forMeInformations = new ArrayList<>();
@@ -83,5 +86,41 @@ public class InformationService {
         }
 
         return forMeInformations;
+    }
+
+    public List<Information> findByUserIdWithFilters(Long userId, Long categoryId, LocalDate startDate, LocalDate endDate) {
+        Specification<Information> spec = Specification.where(hasUserId(userId));
+
+        if (categoryId != null) {
+            spec = spec.and(hasCategoryId(categoryId));
+        }
+        if (startDate != null) {
+            spec = spec.and(hasDateAddedAfter(startDate));
+        }
+        if (endDate != null) {
+            spec = spec.and(hasDateAddedBefore(endDate));
+        }
+
+        return infoRepo.findAll(spec);
+    }
+
+    private Specification<Information> hasUserId(Long userId) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("userEntity").get("id"), userId);
+    }
+
+    private Specification<Information> hasCategoryId(Long categoryId) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("category").get("id"), categoryId);
+    }
+
+    private Specification<Information> hasDateAddedAfter(LocalDate startDate) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("dateAdded"), startDate);
+    }
+
+    private Specification<Information> hasDateAddedBefore(LocalDate endDate) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("dateAdded"), endDate);
     }
 }

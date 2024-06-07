@@ -13,6 +13,21 @@
 <div th:if="${successMessage}" class="alert alert-success" role="alert">
     <p th:text="${successMessage}"></p>
 </div>
+
+<form action="#" th:action="@{/my-informations}" method="get">
+    <label for="category">Category:</label>
+    <select id="category" name="categoryId">
+        <option value="">All</option>
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>
+    </select>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
+    <button type="submit">Filter</button>
+    <button type="button" class="clear-filters" onclick="window.location.href='/my-informations'">Clear Filters</button>
+</form>
+
 <table id="myInfoTable" class="display">
     <thead>
     <tr>
