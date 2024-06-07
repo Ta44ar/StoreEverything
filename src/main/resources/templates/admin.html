@@ -16,6 +16,7 @@
         <th>Last Name</th>
         <th>Age</th>
         <th>Roles</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@
                 <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
             </ul>
         </td>
+        <td><a th:href="@{/admin/users/edit/{id}(id=${user.id})}">Edit</a></td>
     </tr>
     </tbody>
 </table>

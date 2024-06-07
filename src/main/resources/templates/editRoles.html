@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User Roles</title>
+</head>
+<body>
+<h1>Edit User Roles</h1>
+<form action="/admin/users/edit/${user.id}" method="post" onsubmit="return validateRoles()">
+    <input type="hidden" name="userId" th:value="${user.id}">
+    <p>Name: <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></p>
+    <p>Username: <strong th:text="${user.username}"></strong></p>
+    <p>Current Roles:</p>
+    <ul>
+        <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+    </ul>
+    <p>Select New Roles:</p>
+    <ul>
+        <li th:each="role : ${allRoles}">
+            <input type="checkbox" name="selectedRoles" th:value="${role.id}" th:id="'role_' + ${role.id}">
+            <label th:for="'role_' + ${role.id}" th:text="${role.name}"></label>
+        </li>
+    </ul>
+    <button type="submit">Update Roles</button>
+</form>
+<a href="/admin/users">Back</a>
+
+<script>
+    function validateRoles() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedRoles"]:checked');
+        if (checkboxes.length === 0) {
+            alert("Please select at least one role.");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>
