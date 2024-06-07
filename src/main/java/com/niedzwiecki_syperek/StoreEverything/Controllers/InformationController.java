@@ -5,6 +5,7 @@ import com.niedzwiecki_syperek.StoreEverything.Services.CustomUserDetailsService
 import com.niedzwiecki_syperek.StoreEverything.Services.InformationService;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Category;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
+import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -164,4 +166,13 @@ public class InformationController {
         model.addAttribute("currentUserId", currentUserId);
         return "viewInfo";
     }
+
+    @GetMapping("/information/shared-with-me")
+    public String viewSharedWithMeInformations(Model model) {
+        Long currentUserId = customUserDetailsService.getCurrentUser().getId();
+        List<Information> sharedWithMeInformations = informationService.findSharedWithMeInfos(currentUserId);
+        model.addAttribute("sharedWithMeInformations", sharedWithMeInformations);
+        return "sharedInformations";
+    }
+
 }

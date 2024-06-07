@@ -10,6 +10,7 @@
 <div sec:authorize="isAuthenticated()">
     <p>Welcome to the homepage, <span th:text="${first_name}"></span>!</p>
     <a th:href="@{/my-informations}">My informations</a>
+    <a th:href="@{/information/shared-with-me}">Shared with me</a>
     <a href="/logout">Sign Out</a>
 </div>
 <div sec:authorize="!isAuthenticated()">

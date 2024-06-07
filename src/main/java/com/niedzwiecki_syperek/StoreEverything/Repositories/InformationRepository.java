@@ -12,4 +12,5 @@ public interface InformationRepository extends JpaRepository<Information, Long> 
     List<Information> findByUserEntityId(Long userId);
 
     Optional<Information> findByShareableLink(String shareableLink);
+
 }

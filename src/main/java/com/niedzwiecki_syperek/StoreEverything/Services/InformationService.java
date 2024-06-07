@@ -5,8 +5,10 @@ import com.niedzwiecki_syperek.StoreEverything.Repositories.UserRepository;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,5 +69,19 @@ public class InformationService {
 
         information.getSharedWithUsers().add(userToShare);
         infoRepo.save(information);
+    }
+
+    public List<Information> findSharedWithMeInfos(Long userId) {
+        List<Information> allInformations = infoRepo.findAll();
+        List<Information> forMeInformations = new ArrayList<>();
+
+        for (Information information : allInformations) {
+            List<UserEntity> sharedWithUsers = information.getSharedWithUsers();
+            if (sharedWithUsers != null && sharedWithUsers.stream().anyMatch(user -> user.getId().equals(userId))) {
+                forMeInformations.add(information);
+            }
+        }
+
+        return forMeInformations;
     }
 }

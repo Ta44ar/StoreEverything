@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Shared Informations</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+</head>
+<body>
+<h1>Informations shared privately</h1>
+
+<table id="sharedInfoTable" class="display">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Link</th>
+        <th>Category</th>
+        <th>Date Added</th>
+        <th>Shared By</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="info : ${sharedWithMeInformations}">
+        <td th:text="${info.title}">Title</td>
+        <td th:text="${info.content}">Content</td>
+        <td><a th:href="@{/information/shared/{shareableLink}(shareableLink=${info.shareableLink})}" th:text="${info.shareableLink}">Link</a></td>
+        <td th:text="${info.category.name}">Category</td>
+        <td th:text="${info.dateAdded}">Date Added</td>
+        <td th:text="${info.userEntity.firstName + ' ' + info.userEntity.lastName}">Shared By</td>
+    </tr>
+    </tbody>
+</table>
+<a href="/">Back</a>
+
+<script>
+    $(document).ready(function () {
+        $('#sharedInfoTable').DataTable();
+    });
+</script>
+</body>
+</html>
