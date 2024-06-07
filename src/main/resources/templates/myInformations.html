@@ -36,6 +36,7 @@
         <th>Link</th>
         <th>Category</th>
         <th>Date Added</th>
+        <th>Shared with</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -46,6 +47,11 @@
         <td><a th:href="@{/information/shared/{shareableLink}(shareableLink=${info.shareableLink})}" th:text="${info.shareableLink}">Link</a></td>
         <td th:text="${info.category.name}">Category</td>
         <td th:text="${info.dateAdded}">Date Added</td>
+        <td>
+            <ul>
+                <li th:each="user : ${info.sharedWithUsers}" th:text="${user.username}">Użytkownik</li>
+            </ul>
+        </td>
         <td>
             <a th:href="@{/information/view/{id}(id=${info.id})}">View</a>
             <a th:href="@{/information/edit/{id}(id=${info.id})}">Edit</a>
