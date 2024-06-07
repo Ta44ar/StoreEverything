@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Edit User Roles</h1>
-<form action="/admin/users/edit/${user.id}" method="post" onsubmit="return validateRoles()">
+<form action="#" th:action="@{/admin/users/edit/{userId}(userId=${user.id})}" method="post" onsubmit="return validateRoles()">
     <input type="hidden" name="userId" th:value="${user.id}">
     <p>Name: <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></p>
     <p>Username: <strong th:text="${user.username}"></strong></p>
@@ -23,7 +23,7 @@
     </ul>
     <button type="submit">Update Roles</button>
 </form>
-<a href="/admin/users">Back</a>
+<a th:href="@{/admin/users}">Back</a>
 
 <script>
     function validateRoles() {
