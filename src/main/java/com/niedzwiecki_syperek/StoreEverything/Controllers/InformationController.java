@@ -6,6 +6,8 @@ import com.niedzwiecki_syperek.StoreEverything.Services.InformationService;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Category;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
@@ -19,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -38,7 +41,16 @@ public class InformationController {
             @RequestParam(required = false, name = "categoryId") Long categoryId,
             @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @CookieValue(value = "savedOrder", defaultValue = "") String encodedOrder,
             Model model) {
+        if (!encodedOrder.isEmpty()) {
+            System.out.println(encodedOrder);
+            byte[] decodedBytes = Base64.getDecoder().decode(encodedOrder);
+            String decodedOrder = new String(decodedBytes);
+            model.addAttribute("savedOrder", decodedOrder);
+        } else {
+            model.addAttribute("savedOrder", "");
+        }
         Long currentUserId = customUserDetailsService.getCurrentUser().getId();
         List<Information> myInformations = informationService.findByUserIdWithFilters(currentUserId, categoryId, startDate, endDate);
         model.addAttribute("myInformations", myInformations);
@@ -47,6 +59,23 @@ public class InformationController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         return "myInformations";
+    }
+
+    @GetMapping("/my-informations/save-order")
+    public String saveOrder(@RequestParam("order") String order, HttpServletResponse response) {
+        String encodedOrder = java.util.Base64.getEncoder().encodeToString(order.getBytes());
+        Cookie cookie = new Cookie("savedOrder", encodedOrder);
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
+        return "redirect:/my-informations";
+    }
+
+    @GetMapping("/my-informations/clear-order")
+    public String clearCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("savedOrder", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/my-informations";
     }
 
     @GetMapping("/information/add")

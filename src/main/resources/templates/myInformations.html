@@ -27,7 +27,8 @@
     <button type="submit">Filter</button>
     <button type="button" class="clear-filters" onclick="window.location.href='/my-informations'">Clear Filters</button>
 </form>
-
+<button id="saveOrderBtn">Save Order</button>
+<button id="clearSavedOrderBtn" disabled>Clear saved order</button>
 <table id="myInfoTable" class="display">
     <thead>
     <tr>
@@ -64,9 +65,32 @@
     </tbody>
 </table>
 <a href="/">Back</a>
-<script>
+<script th:inline="javascript">
     $(document).ready(function () {
-        $('#myInfoTable').DataTable();
+        function unescapeAll(inputString) {
+            return inputString.replace(/\\(.)/g, '$1');
+        }
+
+        var savedOrder = /*[[${savedOrder}]]*/ '';
+        savedOrder = unescapeAll(savedOrder);
+
+        var table = $('#myInfoTable').DataTable();
+
+        if (savedOrder) {
+            $('#clearSavedOrderBtn').prop('disabled', false);
+            table.state.clear();
+            table.state({ order: JSON.parse(savedOrder) });
+            table.draw();
+        }
+
+        $('#saveOrderBtn').on('click', function() {
+            var order = JSON.stringify(table.state().order);
+            window.location.href = '/my-informations/save-order?order=' + encodeURIComponent(order);
+        });
+
+        $('#clearSavedOrderBtn').on('click', function() {
+            window.location.href = '/my-informations/clear-order';
+        });
     });
 </script>
 </body>
