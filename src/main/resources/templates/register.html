@@ -1,35 +1,64 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"></script>
 </head>
 <body>
-<h1>Register</h1>
-<div th:if="${error}">
-    <p>Username already exists. Please choose another username.</p>
+<div class="container mt-5">
+    <h1 class="text-center">Register</h1>
+    <div th:if="${error}" class="alert alert-danger">
+        <p>Username already exists. Please choose another username.</p>
+    </div>
+    <form th:action="@{/register}" method="post" th:object="${user}">
+        <!-- First Name input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" th:field="*{firstName}" id="firstName" class="form-control" placeholder="First Name" required/>
+            <label class="form-label" for="firstName">First Name</label>
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">First Name error</span>
+        </div>
+
+        <!-- Last Name input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" th:field="*{lastName}" id="lastName" class="form-control" placeholder="Last Name" required/>
+            <label class="form-label" for="lastName">Last Name</label>
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Last Name error</span>
+        </div>
+
+        <!-- Age input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="number" th:field="*{age}" id="age" class="form-control" placeholder="Age" required/>
+            <label class="form-label" for="age">Age</label>
+            <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="text-danger">Age error</span>
+        </div>
+
+        <!-- Username input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" th:field="*{username}" id="username" class="form-control" placeholder="Username" required/>
+            <label class="form-label" for="username">Username</label>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Username error</span>
+        </div>
+
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" th:field="*{password}" id="password" class="form-control" placeholder="Password" required/>
+            <label class="form-label" for="password">Password</label>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Password error</span>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+
+        <div class="text-center">
+            <p>I already have an account! <a href="/login">Log In</a></p>
+        </div>
+    </form>
 </div>
-<form th:action="@{/register}" method="post" th:object="${user}">
-    <div>
-        <input type="text" th:field="*{firstName}" placeholder="First Name" required/>
-        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name error</span>
-    </div>
-    <div>
-        <input type="text" th:field="*{lastName}" placeholder="Last Name" required/>
-        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name error</span>
-    </div>
-    <div>
-        <input type="number" th:field="*{age}" placeholder="Age" required/>
-        <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</span>
-    </div>
-    <div>
-        <input type="text" th:field="*{username}" placeholder="Username" required/>
-        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
-    </div>
-    <div>
-        <input type="password" th:field="*{password}" placeholder="Password" required/>
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
-    </div>
-    <input type="submit" value="Register"/>
-</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

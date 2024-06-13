@@ -1,56 +1,101 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shared Informations</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"/>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-<h1>Informations shared privately</h1>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Store Everything</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/my-informations}">Information's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/information/shared-with-me}">Shared</a>
+                </li>
+            </ul>
+            <div sec:authorize="isAuthenticated()">
+                <a class="btn btn-danger" href="/logout">Sign Out</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-<form action="#" th:action="@{/my-informations}" method="get">
-    <label for="category">Category:</label>
-    <select id="category" name="categoryId">
-        <option value="">All</option>
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>
-    </select>
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
-    <button type="submit">Filter</button>
-    <button type="button" class="clear-filters" onclick="window.location.href='/my-informations'">Clear Filters</button>
-</form>
+<div class="container mt-5">
+    <h1 class="text-left">Shared Informations</h1>
 
-<table id="sharedInfoTable" class="display">
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Link</th>
-        <th>Category</th>
-        <th>Date Added</th>
-        <th>Shared By</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="info : ${sharedWithMeInformations}">
-        <td th:text="${info.title}">Title</td>
-        <td th:text="${info.content}">Content</td>
-        <td><a th:href="@{/information/shared/{shareableLink}(shareableLink=${info.shareableLink})}" th:text="${info.shareableLink}">Link</a></td>
-        <td th:text="${info.category.name}">Category</td>
-        <td th:text="${info.dateAdded}">Date Added</td>
-        <td th:text="${info.userEntity.firstName + ' ' + info.userEntity.lastName}">Shared By</td>
-    </tr>
-    </tbody>
-</table>
-<a href="/">Back</a>
+    <form action="#" th:action="@{/my-informations}" method="get" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="category" class="form-label">Category:</label>
+                <select id="category" name="categoryId" class="form-select">
+                    <option value="">All</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control" th:value="${startDate}"/>
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">End Date:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control" th:value="${endDate}"/>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">Filter</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/my-informations'">Clear Filters</button>
+            </div>
+        </div>
+    </form>
 
-<script>
+    <table id="sharedInfoTable" class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Link</th>
+            <th>Category</th>
+            <th>Date Added</th>
+            <th>Shared By</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="info : ${sharedWithMeInformations}">
+            <td th:text="${info.title}">Title</td>
+            <td th:text="${info.content}">Content</td>
+            <td><a th:href="@{/information/shared/{shareableLink}(shareableLink=${info.shareableLink})}" th:text="${info.shareableLink}">Link</a></td>
+            <td th:text="${info.category.name}">Category</td>
+            <td th:text="${info.dateAdded}">Date Added</td>
+            <td th:text="${info.userEntity.firstName + ' ' + info.userEntity.lastName}">Shared By</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <a href="/" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+
+<script th:inline="javascript">
     $(document).ready(function () {
-        $('#sharedInfoTable').DataTable();
+        $('#sharedInfoTable').DataTable({
+            "order": []
+        });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2vPjq5R9UaDzQ+smHGXVW+J1Qj+hG7fpRAXrBjzzSmFsP2sI4XxOSc2hFTg" crossorigin="anonymous"></script>
 </body>
 </html>
