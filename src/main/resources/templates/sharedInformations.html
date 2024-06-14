@@ -18,16 +18,19 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarColor02">
+        <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/my-informations}">Information's</a>
+                    <a class="nav-link" th:href="@{/my-informations}">Information</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/information/shared-with-me}">Shared</a>
+                    <a class="nav-link" th:href="@{/information/shared-with-me}">Shared for me</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" href="/admin/users">Admin Panel</a>
                 </li>
             </ul>
-            <div sec:authorize="isAuthenticated()">
+            <div>
                 <a class="btn btn-danger" href="/logout">Sign Out</a>
             </div>
         </div>
@@ -35,7 +38,7 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-left">Shared Informations</h1>
+    <h1 class="text-left">Shared Information</h1>
 
     <form action="#" th:action="@{/my-informations}" method="get" class="mb-3">
         <div class="row">
@@ -83,9 +86,6 @@
         </tr>
         </tbody>
     </table>
-    <div class="text-center">
-        <a href="/" class="btn btn-secondary">Back</a>
-    </div>
 </div>
 
 <script th:inline="javascript">
