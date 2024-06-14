@@ -5,7 +5,6 @@ import com.niedzwiecki_syperek.StoreEverything.Services.CustomUserDetailsService
 import com.niedzwiecki_syperek.StoreEverything.Services.InformationService;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Category;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
-import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -44,7 +42,6 @@ public class InformationController {
             @CookieValue(value = "savedOrder", defaultValue = "") String encodedOrder,
             Model model) {
         if (!encodedOrder.isEmpty()) {
-            System.out.println(encodedOrder);
             byte[] decodedBytes = Base64.getDecoder().decode(encodedOrder);
             String decodedOrder = new String(decodedBytes);
             model.addAttribute("savedOrder", decodedOrder);
