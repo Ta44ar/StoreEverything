@@ -8,6 +8,8 @@ import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,8 +163,15 @@ public class InformationController {
 
     @GetMapping("/information/shared/{shareableLink}")
     public String viewSharedInformation(@PathVariable("shareableLink") String shareableLink, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = null;
+
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            currentUserId = customUserDetailsService.getCurrentUser().getId();
+        }
         Information information = informationService.findByShareableLink(shareableLink);
         model.addAttribute("information", information);
+        model.addAttribute("currentUserId", currentUserId);
         return "viewSharedInfo";
     }
 

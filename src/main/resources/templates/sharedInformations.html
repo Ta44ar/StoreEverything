@@ -73,6 +73,7 @@
             <th>Category</th>
             <th>Date Added</th>
             <th>Shared By</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -83,6 +84,9 @@
             <td th:text="${info.category.name}">Category</td>
             <td th:text="${info.dateAdded}">Date Added</td>
             <td th:text="${info.userEntity.firstName + ' ' + info.userEntity.lastName}">Shared By</td>
+            <td class="lh-lg">
+                <a th:href="@{/information/view/{id}(id=${info.id})}" class="btn btn-primary btn-sm">View</a>
+            </td>
         </tr>
         </tbody>
     </table>
