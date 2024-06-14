@@ -102,7 +102,7 @@
                     <li th:each="user : ${info.sharedWithUsers}" th:text="${user.username}">Użytkownik</li>
                 </ul>
             </td>
-            <td>
+            <td class="lh-lg">
                 <a th:href="@{/information/view/{id}(id=${info.id})}" class="btn btn-primary btn-sm">View</a>
                 <a th:href="@{/information/edit/{id}(id=${info.id})}" class="btn btn-secondary btn-sm">Edit</a>
                 <a th:href="@{/information/share/{id}(id=${info.id})}" class="btn btn-info btn-sm">Share</a>
