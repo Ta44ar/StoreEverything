@@ -55,7 +55,12 @@ public class SecurityConfig {
                 )
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/")
-                        .permitAll());
+                        .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/error403")) // Obsługa błędów 403 (Forbidden)
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/error")) // Obsługa błędów autoryzacji (np. 401, 404)
+                );
 
         return http.build();
     }
