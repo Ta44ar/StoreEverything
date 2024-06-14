@@ -42,7 +42,7 @@
     <a th:href="@{/information/add}" class="btn btn-primary mb-3">New Information</a>
     <a th:href="@{/category/add}" class="btn btn-primary mb-3">New Category</a>
     <div th:if="${successMessage}" class="alert alert-success" role="alert">
-        <p th:text="${successMessage}"></p>
+        <p th:text="${successMessage}" class="mb-0"></p>
     </div>
     <div class="row mb-3">
         <form action="#" th:action="@{/my-informations}" method="get" class="col-md-9">
