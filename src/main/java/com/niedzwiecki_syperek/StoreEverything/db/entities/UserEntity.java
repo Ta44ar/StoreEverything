@@ -20,26 +20,26 @@ public class UserEntity {
     @Column(nullable = false)
     private Long id;
 
-    @NotBlank(message = "Imię użytkownika nie może być puste")
-    @Size(min = 3, max = 20, message = "Imię użytkownika musi mieć od 3 do 20 znaków")
-    @Pattern(regexp = "^[A-Z][a-z]+$", message = "Imię użytkownika powinno rozpoczynać się od wielkiej litery, a następnie składać się wyłącznie z małych liter.")
+    @NotBlank(message = "User's name cannot be blank.")
+    @Size(min = 3, max = 20, message = "User's name must be between 3 and 20 characters long.")
+    @Pattern(regexp = "^[A-Z][a-z]+$", message = "The user's name should begin with an uppercase letter and then consist only of lowercase letters.")
     private String firstName;
 
-    @NotBlank(message = "Nazwisko użytkownika nie może być puste")
-    @Size(min = 3, max = 50, message = "Nazwisko użytkownika musi mieć od 3 do 50 znaków")
-    @Pattern(regexp = "^[A-Z][a-z]+$", message = "Nazwisko użytkownika powinno rozpoczynać się od wielkiej litery, a następnie składać się wyłącznie z małych liter.")
+    @NotBlank(message = "The user's forname cannot be blank.")
+    @Size(min = 3, max = 50, message = "User's forname must be between 3 and 20 characters long.")
+    @Pattern(regexp = "^[A-Z][a-z]+$", message = "The user's forname should begin with an uppercase letter and then consist only of lowercase letters.")
     private String lastName;
 
-    @NotBlank(message = "Login użytkownika nie może być pusty")
-    @Size(min = 3, max = 20, message = "Login użytkownika musi mieć od 3 do 20 znaków")
-    @Pattern(regexp = "^[a-z]+$", message = "Login użytkownika musi składać się z małych liter")
+    @NotBlank(message = "The user's login cannot be blank.")
+    @Size(min = 3, max = 20, message = "User's login must be between 3 and 20 characters long.")
+    @Pattern(regexp = "^[a-z]+$", message = "The user's login should consist only of lowercase letters.")
     private String username;
 
-    @NotBlank(message = "Hasło użytkownika nie może być puste")
-    @Size(min = 5, message = "Hasło użytkownika musi mieć co najmniej 5 znaków")
+    @NotBlank(message = "The user's login cannot be blank.")
+    @Size(min = 5, message = "User password must be at least 5 characters long.")
     private String password;
 
-    @Min(value = 18, message = "Użytkownik musi być pełnoletni")
+    @Min(value = 18, message = "The user must be an adult.")
     private int age;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

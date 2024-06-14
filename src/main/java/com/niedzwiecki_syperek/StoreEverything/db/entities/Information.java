@@ -19,31 +19,31 @@ public class Information {
     private Long id;
 
     @Column(nullable = false, length = 20)
-    @Size(min = 3, max = 20, message = "Tytuł musi mieć od 3 do 20 znaków")
-    @NotNull(message = "Tytuł nie może być pusty")
+    @Size(min = 3, max = 20, message = "The title must be between 3 and 20 characters long.")
+    @NotNull(message = "The title can't be empty.")
     private String title;
 
     @Column(nullable = false, length = 500)
-    @Size(min = 5, max = 500, message = "Treść musi mieć od 5 do 500 znaków")
-    @NotNull(message = "Treść nie może być pusta")
+    @Size(min = 5, max = 500, message = "The content must be between 5 and 500 characters long.")
+    @NotNull(message = "The content can't be empty.")
     private String content;
 
     @Column(unique = true)
     private String shareableLink;
 
     @Column(nullable = false)
-    @NotNull(message = "Data dodania nie może być pusta")
+    @NotNull(message = "The date of addition cannot be blank.")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateAdded;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @NotNull(message = "Kategoria nie może być pusta")
+    @NotNull(message = "Category field cannot be blank.")
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @NotNull(message = "Użytkownik nie może być pusty")
+    @NotNull(message = "User cannot be blank.")
     private UserEntity userEntity;
 
     @ManyToMany

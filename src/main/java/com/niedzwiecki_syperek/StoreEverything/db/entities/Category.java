@@ -17,9 +17,9 @@ public class Category {
     @Column(nullable = false)
     private Long id;
 
-    @NotBlank(message = "Nazwa kategorii nie może być pusta")
-    @Size(min = 3, max = 20, message = "Nazwa kategorii musi mieć od 3 do 20 znaków")
-    @Pattern(regexp = "^[a-z]+$", message = "Nazwa kategorii musi składać się z samych małych liter")
+    @NotBlank(message = "Category name cannot be blank.")
+    @Size(min = 3, max = 20, message = "The category name must be between 3 and 20 characters long.")
+    @Pattern(regexp = "^[a-z]+$", message = "The category name must consist of only lowercase letters.")
     private String name;
 
 }
