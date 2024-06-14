@@ -203,10 +203,17 @@ public class InformationController {
     }
 
     @GetMapping("/information/shared-with-me")
-    public String viewSharedWithMeInformations(Model model) {
+    public String viewSharedWithMeInformations(Model model,
+                                               @RequestParam(required = false, name = "categoryId") Long categoryId,
+                                               @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                               @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         Long currentUserId = customUserDetailsService.getCurrentUser().getId();
-        List<Information> sharedWithMeInformations = informationService.findSharedWithMeInfos(currentUserId);
+        List<Information> sharedWithMeInformations = informationService.findSharedWithMeInfos(currentUserId, categoryId, startDate, endDate);
         model.addAttribute("sharedWithMeInformations", sharedWithMeInformations);
+        model.addAttribute("categories", categoryService.findAllSortedByPopularity());
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "sharedInformations";
     }
 

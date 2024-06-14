@@ -4,6 +4,8 @@ import com.niedzwiecki_syperek.StoreEverything.Repositories.InformationRepositor
 import com.niedzwiecki_syperek.StoreEverything.Repositories.UserRepository;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.Information;
 import com.niedzwiecki_syperek.StoreEverything.db.entities.UserEntity;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.data.jpa.domain.Specification;
@@ -74,18 +76,20 @@ public class InformationService {
     }
 
 
-    public List<Information> findSharedWithMeInfos(Long userId) {
-        List<Information> allInformations = infoRepo.findAll();
-        List<Information> forMeInformations = new ArrayList<>();
+    public List<Information> findSharedWithMeInfos(Long userId, Long categoryId, LocalDate startDate, LocalDate endDate) {
+        Specification<Information> spec = Specification.where(isSharedWithUser(userId));
 
-        for (Information information : allInformations) {
-            List<UserEntity> sharedWithUsers = information.getSharedWithUsers();
-            if (sharedWithUsers != null && sharedWithUsers.stream().anyMatch(user -> user.getId().equals(userId))) {
-                forMeInformations.add(information);
-            }
+        if (categoryId != null) {
+            spec = spec.and(hasCategoryId(categoryId));
+        }
+        if (startDate != null) {
+            spec = spec.and(hasDateAddedAfter(startDate));
+        }
+        if (endDate != null) {
+            spec = spec.and(hasDateAddedBefore(endDate));
         }
 
-        return forMeInformations;
+        return infoRepo.findAll(spec);
     }
 
     public List<Information> findByUserIdWithFilters(Long userId, Long categoryId, LocalDate startDate, LocalDate endDate) {
@@ -122,5 +126,12 @@ public class InformationService {
     private Specification<Information> hasDateAddedBefore(LocalDate endDate) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.lessThanOrEqualTo(root.get("dateAdded"), endDate);
+    }
+
+    private Specification<Information> isSharedWithUser(Long userId) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Object, Object> sharedWithUsers = root.join("sharedWithUsers", JoinType.LEFT);
+            return criteriaBuilder.equal(sharedWithUsers.get("id"), userId);
+        };
     }
 }
